@@ -63,6 +63,9 @@ class LinkedList {
 
   at(index) {
     let currentNode = this.head;
+    if (currentNode === null) {
+      return null;
+    }
 
     for (let i = 0; i <= index; i++) {
       if (i === index) {
@@ -98,10 +101,25 @@ class LinkedList {
       do {
         if (currentNode.key === key) {
           value = currentNode.value;
+          break;
         }
         currentNode = currentNode.nextNode;
       } while (currentNode);
-      return value;
+    }
+    return value;
+  }
+
+  updateValueGivenKey(key, value) {
+    let currentNode = this.head;
+
+    if (currentNode !== null) {
+      do {
+        if (currentNode.key === key) {
+          currentNode.value = value;
+          break;
+        }
+        currentNode = currentNode.nextNode;
+      } while (currentNode);
     }
   }
 
@@ -137,6 +155,20 @@ class LinkedList {
       return contains;
     }
   }
+
+  listKeys() {
+    let currentNode = this.head;
+    let keys = [];
+
+    if (currentNode) {
+      do {
+        keys.push(currentNode.key);
+        currentNode = currentNode.nextNode;
+      } while (currentNode);
+      return keys;
+    }
+  }
+
   containsValue(value) {
     let currentNode = this.head;
     let contains = false;
@@ -170,6 +202,32 @@ class LinkedList {
     return contains === false ? null : index;
   }
 
+  listValues() {
+    let currentNode = this.head;
+    let values = [];
+
+    if (currentNode !== null) {
+      do {
+        values.push(currentNode.value);
+        currentNode = currentNode.nextNode;
+      } while (currentNode);
+      return values;
+    }
+  }
+
+  listEntries() {
+    let currentNode = this.head;
+    let entries = [];
+
+    if (currentNode !== null) {
+      do {
+        entries.push([currentNode.key, currentNode.value]);
+        currentNode = currentNode.nextNode;
+      } while (currentNode);
+      return entries;
+    }
+  }
+
   insertAt(key, value, index) {
     if (index === 0) {
       this.prepend(value);
@@ -197,20 +255,23 @@ class LinkedList {
 
   removeAt(index) {
     if (!this.at(index)) {
-      return;
+      return false;
     }
 
     let currentNode = this.head;
     let previousNode = null;
 
     for (let i = 0; i <= index; i++) {
-      if (i === index) {
+      if (index === 0) {
+        this.head = currentNode.nextNode;
+      } else if (i === index) {
         previousNode.nextNode = currentNode.nextNode;
       } else {
         previousNode = currentNode;
         currentNode = currentNode.nextNode;
       }
     }
+    return true;
   }
 
   toString() {
